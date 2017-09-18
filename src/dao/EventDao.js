@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+let mongoose = require('mongoose')
 
 class EventsDao {
   constructor() {
@@ -6,7 +6,7 @@ class EventsDao {
   }
 
   new(event, callback) {
-    this.Event.create(event, callback)
+    return this.Event.create(event, callback)
   }
 
   getAllNext(callback) {
@@ -39,11 +39,12 @@ class EventsDao {
   }
 
   getAllPrevious(callback) {
-    this.Event.find({firstDay: {$lt: new Date()}}, {_id: false}, callback)
+    let today = new Date().toDateString()
+    return this.Event.find({firstDay: {$lt: today}}, {_id: false, __v : false}, callback)
   }
 
 	getAll(callback) {
-		this.Event.find({}, {}, callback)
+		return this.Event.find({}, {_id: false, __v: false}, callback)
 	}
 
 	update(id, event, callback) {
